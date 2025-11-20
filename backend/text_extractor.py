@@ -11,7 +11,7 @@ def extract_pdf_text(path):
 
 #---TESTING---#
 
-PDF_PATH = "/Users/andyli/Downloads/indexccl.pdf"
+PDF_PATH = "files/ccl.pdf"
 
 all_text = extract_pdf_text(PDF_PATH)
 print(f"Extracted {len(all_text)} characters from PDF.")

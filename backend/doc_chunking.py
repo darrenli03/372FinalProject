@@ -24,7 +24,7 @@ def chunk_text(text, max_chars=1000):
 
     return chunks
 
-chunks = chunk_text(extract_pdf_text("/Users/andyli/Downloads/indexccl.pdf"), max_chars=1000)
+chunks = chunk_text(extract_pdf_text("files/ccl.pdf"), max_chars=1000)
 print(f"Total chunks: {len(chunks)}")
 print(f"First chunk ({len(chunks[0])} chars): {chunks[0]}")
 
