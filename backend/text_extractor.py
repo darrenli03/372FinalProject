@@ -9,10 +9,18 @@ def extract_pdf_text(path):
                 text += page_text + "\n"
     return text
 
+def save_text_to_file(text, filename):
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(text)
+
 #---TESTING---#
 
 PDF_PATH = "files/ccl.pdf"
+TXT_PATH = "files/ccl.txt"
 
 all_text = extract_pdf_text(PDF_PATH)
 print(f"Extracted {len(all_text)} characters from PDF.")
-print(all_text[:500])  
+print(all_text[:500])
+
+save_text_to_file(all_text, TXT_PATH)
+print(f"Saved extracted text to {TXT_PATH}")
