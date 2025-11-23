@@ -60,12 +60,11 @@ def create_chroma_db(documents: List, path: str, name: str) -> Tuple[chromadb.Co
     db = chroma_client.create_collection(name=name, embedding_function=openai_ef)
     
     for i, d in enumerate(documents):
-        print(f"Adding document {i} / {len(documents)} to the database")
+        print(f"Adding document {i+1} / {len(documents)} to the database")
         try:
             db.add(documents=[d.page_content], ids=str(i))
         except Exception as e:
-            print(f"Error adding document {i}: {e}")    
-
+            print(f"Error adding document {i+1}: {e}")    
     return db, name
 
 # load txt file
