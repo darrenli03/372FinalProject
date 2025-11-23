@@ -48,7 +48,7 @@ Model Evaluation and Analysis
 
 - [ ] Construct query (system prompt + context + component info), apply instruction tuning so we are able to program actions based on the response from the OpenAI API
 
-  * Applied instruction tuning or supervised fine-tuning (SFT) for specific task format (7 pts)
+  * Applied instruction tuning or supervised fine-tuning (SFT) for specific task format (7 pts) (Questionable)
 
 - [ ] Send constructed query to OpenAI API
 
