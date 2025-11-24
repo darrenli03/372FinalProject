@@ -4,15 +4,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List, Tuple
 import chromadb
 import chromadb.utils.embedding_functions as embedding_functions
-import time
+# import time
 # import re
 
-
-CHROMA_PATH = "files/chroma_db"
-dbName = "ccl-embeddings"
 # Load environment variables
 load_dotenv()
-
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # 1. Load data
@@ -77,6 +73,9 @@ text = load_text(DOC_PATH)
 
 chunks = split_text(text, chunk_size=1000, overlap=500)
 print(chunks[0])
+
+CHROMA_PATH = "files/chroma_db"
+dbName = "ccl-embeddings"
 
 # Load the database for future queries
 db, collection_name = create_chroma_db(documents=chunks, path=CHROMA_PATH, name=dbName)

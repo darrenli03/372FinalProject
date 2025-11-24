@@ -5,6 +5,7 @@
 - Could also implement a chat mode in addition to the automated excel sheet processing, that can get us this rubric item:
   - Built multi-turn conversation system with context management and history tracking (7 pts)
 - fine tuning would require significant effort since we need to create the prompt/answer database ourselves
+- To regenerate the database, boot up the virtual environment with the requirements from backend/requirements.txt, first run doc_embedding.py (text_extractor.py generated files/ccl.txt that is already version controlled, but may need to be updated as the legal body updates) (this will likely take an hour or two), then run pinecone_upload.py to replace the old index in pinecone with the new embeddings (perhaps about 10 minutes?)
 
 ## Unmatched Rubric Items:
 Core ML Fundamentals

@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 from chromadb import PersistentClient
 
 load_dotenv()
-
-pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
+PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
+pc = Pinecone(api_key=PINECONE_API_KEY)
 
 def migrate_chroma_to_pinecone(chroma_path, collection_name, pinecone_index_name):
     chroma_client = PersistentClient(path=chroma_path)
