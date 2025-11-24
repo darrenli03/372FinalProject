@@ -10,6 +10,7 @@
 Core ML Fundamentals
 - Modular code design with reusable functions and classes rather than monolithic scripts (3 pts)
 - Created baseline model for comparison (e.g., constant prediction, random, simple heuristic) (3 pts)
+    - Return random excel sheet with yes/no on everything
 - Implemented data augmentation appropriate to your data modality (evidence: code + evaluation of impact) (5 pts) 
     - this could be done in the process of creating our test dataset, for example creating an example user prompt and replacing words in it with synonyms to increase our test set size
 
@@ -17,14 +18,12 @@ Natural Language Processing
 
 - Applied in-context learning with few short examples or chain of thought prompting (5 pts)
 - Applied prompt engineering with evaluation of multiple prompt designs (evidence: comparison table) (3 pts)
-- Built retrieval-augmented generation (RAG) system with document retrieval and generation components (10 pts)
-- 
+- Built retrieval-augmented generation (RAG) system with document retrieval and generation components (10 pts) 
 
 Advanced System Integration
 
 - Implemented production-grade deployment (evidence of at least two considerations such as rate limiting, caching, monitoring, error handling, logging) (10 pts)
 - System guardrails against toxicity or inappropriate use employing at least two techniques (e.g., fine-tuning, system prompt, toxicity classifier, etc.) with evidence of impact (7 pts)
--  
  
 Model Evaluation and Analysis
 
@@ -49,7 +48,7 @@ Model Evaluation and Analysis
 
 - [ ] Construct query (system prompt + context + component info), apply instruction tuning so we are able to program actions based on the response from the OpenAI API
 
-  * Applied instruction tuning or supervised fine-tuning (SFT) for specific task format (7 pts)
+  * Applied instruction tuning or supervised fine-tuning (SFT) for specific task format (7 pts) (Questionable)
 
 - [ ] Send constructed query to OpenAI API
 
