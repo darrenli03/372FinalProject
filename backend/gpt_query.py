@@ -1,35 +1,91 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv, find_dotenv
-import chromadb
-import chromadb.utils.embedding_functions as embedding_functions
-
-CHROMA_PATH = "files/chroma_db"
-dbName = "ccl-embeddings"
+from pinecone import Pinecone
 
 load_dotenv(find_dotenv())
-client = OpenAI(api_key=os.environ.get("PINECONE_API_KEY"))
 
-# Function to load Chroma collection
-def load_chroma_collection(path: str, name: str):
-    """
-    Loads an existing Chroma collection from the specified path with the given name.
-    """
-    chroma_client = chromadb.PersistentClient(path=path)
-    openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-                api_key=os.environ.get("OPENAI_API_KEY"),
-                model_name="text-embedding-3-small"
-                )
-    return chroma_client.get_collection(name=name, embedding_function=openai_ef)
+# OpenAI client (embeddings + chat)
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Pinecone configuration
+PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
+PINECONE_INDEX = os.environ.get("PINECONE_INDEX", "ccl-embeddings-openaismall")
+
+pine_client = Pinecone(api_key=PINECONE_API_KEY) if PINECONE_API_KEY else None
+pine_index = pine_client.Index(PINECONE_INDEX) if pine_client is not None else None
 
 
-# Retrieval from ChromaDB
-def get_relevant_passage(query, db, n_results):
-    """
-    Retrieve relevant passages for the given query from the database.
-    """
-    passages = db.query(query_texts=[query], n_results=n_results)['documents'][0]
-    # print(passages, "\n")
+# # Function to load Chroma collection
+# def load_chroma_collection(path: str, name: str):
+#     """
+#     Loads an existing Chroma collection from the specified path with the given name.
+#     """
+#     chroma_client = chromadb.PersistentClient(path=path)
+#     openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+#                 api_key=os.environ.get("OPENAI_API_KEY"),
+#                 model_name="text-embedding-3-small"
+#                 )
+#     return chroma_client.get_collection(name=name, embedding_function=openai_ef)
+
+
+def embed_text(text: str, model: str = "text-embedding-3-small"):
+    """Return OpenAI embedding for text."""
+    resp = client.embeddings.create(model=model, input=text)
+    return resp.data[0].embedding
+
+
+def get_relevant_passage(query: str, n_results: int = 4):
+    """Embed the query with OpenAI, query Pinecone, and return the top matched passages as a list."""
+    if pine_index is None:
+        raise RuntimeError("Pinecone index not configured. Set PINECONE_API_KEY and PINECONE_INDEX.")
+
+    embedding = embed_text(query)
+    print("--------------------------------------embedding completed--------------------------------------")
+    # print(embedding)
+    # Query Pinecone using the embedding
+    try:
+        pinecone_response = pine_index.query(vector = embedding, top_k=n_results, include_metadata=True, include_values=False)
+    except TypeError:
+        pinecone_response = pine_index.query(vector = embedding, top_k=n_results, include_metadata=True)
+
+    if not pinecone_response:
+        print("--------------------------------------no response from pinecone--------------------------------------")
+        return []
+    # From pinecone_response, extract `chunk_text` from metadata of each match
+    passages = []
+
+    # The Pinecone response may be a dict or an object with a `.matches` attribute.
+    if hasattr(pinecone_response, "matches"):
+        #this is what is expected
+        matches = pinecone_response.matches
+        # print("matches found")
+    else:
+        print("Pinecone API response does not include matches attribute, aborting")
+        return []
+    for m in matches:
+        # metadata may be an attribute or a dict
+        metadata = getattr(m, "metadata", None)
+        if metadata is None and isinstance(m, dict):
+            metadata = m.get("metadata", {})
+
+        if not metadata:
+            continue
+
+        # metadata is expected to be a dict with field "text" that we want to extract
+        chunk_text = None
+        if isinstance(metadata, dict):
+            # print("------------------metadata is a dict------------------")
+            # print(metadata)
+            chunk_text = metadata["text"]
+            # chunk_text = metadata.get("chunk_text")
+        else:
+            print("metadata not a dict as expected")
+            continue
+
+        if chunk_text:
+            passages.append(chunk_text)
+
     return passages
 
 # Make prompt for generative model
@@ -68,7 +124,7 @@ QUERY:
 
 ---
 Provide:
-1. **A clear classification answer** (e.g., “This item matches the description of …” or “The context does not include information to classify this item.”)
+1. **A clear classification answer** (e.g., "Final Answer: Yes" or "Final Answer: No" or "Final Answer: I don't know")
 2. **A 1–2 sentence explanation referencing only the provided context**
 3. **A quotation of the specific context lines that support your answer**
 """
@@ -77,13 +133,12 @@ Provide:
 
 # Final function to integrate all steps
 def generate_rag_answer(query):
-    db = load_chroma_collection(path=CHROMA_PATH, name=dbName)
-
-    # Retrieve most relevant text chunk
-    relevant_texts = get_relevant_passage(query, db, n_results=4)
-    # print("relevant texts: \n", relevant_texts)
-    prompt = make_rag_prompt(query, relevant_passage="".join(relevant_texts))  # Joining the relevant chunks
-        
+    # Retrieve most relevant text chunks from Pinecone
+    relevant_texts = get_relevant_passage(query, n_results=4)
+    prompt = make_rag_prompt(query, relevant_passage="\n\n".join(relevant_texts))  # Joining the relevant chunks
+    
+    print(prompt)
+    
     response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[
@@ -96,6 +151,6 @@ def generate_rag_answer(query):
 
 # Example usage
 if __name__ == "__main__":
-    user_query = "plutonium fuel rods"
+    user_query = "Military-grade night-vision goggles (Gen-3 NVGs)"
     answer = generate_rag_answer(user_query)
     print("Answer:\n", answer)
