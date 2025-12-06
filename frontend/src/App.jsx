@@ -1,29 +1,35 @@
 import { useState } from "react";
+import QueryForm from "./components/QueryForm";
+import ResponseDisplay from "./components/ResponseDisplay";
 
 function App() {
-  const [file, setFile] = useState(null);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const sendQuery = async (text) => {
+    setLoading(true);
+    setError(null);
+    setResponse(null);
+    try {
+      const encoded = encodeURIComponent(text);
+      const res = await fetch(`http://localhost:8000/query_single?search_query=${encoded}`, {
+        method: "POST",
+      });
 
-  const handleUpload = async () => {
-    if (!file) {
-      alert("Please upload a file first.");
-      return;
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(err?.detail || `${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      // The backend returns {query, response, excerpts}
+      setResponse({ response: data.response || data.answer, excerpts: data.excerpts || [] });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await fetch("http://localhost:5000/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.text();
-    setResponse(data);
   };
 
   return (
@@ -41,69 +47,32 @@ function App() {
       <div
         style={{
           background: "white",
-          padding: "40px",
-          width: "450px",
+          padding: "24px",
+          width: "600px",
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           border: "1px solid #e6e9f0",
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+          maxHeight: "80vh",
         }}
       >
-        <h2
-          style={{
-            color: "#1e3a8a",
-            marginBottom: "20px",
-            textAlign: "center",
-            fontWeight: "600",
-          }}
-        >
-          Upload Excel File
+        <h2 style={{ color: "#1e3a8a", marginBottom: "20px", textAlign: "center", fontWeight: "600" }}>
+          Query the Document DB
         </h2>
 
-        <input
-          type="file"
-          accept=".xlsx,.xls"
-          onChange={handleFileChange}
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #cbd5e1",
-            background: "#f8fafc",
-          }}
-        />
+        <div style={{ flex: "0 0 auto" }}>
+          <QueryForm onSend={sendQuery} />
+        </div>
 
-        <button
-          onClick={handleUpload}
-          style={{
-            marginTop: "20px",
-            width: "100%",
-            padding: "14px",
-            borderRadius: "8px",
-            border: "none",
-            background: "#2563eb",
-            color: "white",
-            fontSize: "16px",
-            fontWeight: "600",
-            cursor: "pointer",
-          }}
-        >
-          Send Query
-        </button>
+        <div style={{ minHeight: 8 }} />
 
-        <div
-          style={{
-            marginTop: "30px",
-            background: "#f8fafc",
-            border: "1px solid #dbe3f1",
-            padding: "20px",
-            borderRadius: "8px",
-            minHeight: "100px",
-          }}
-        >
-          <strong style={{ color: "#1e3a8a" }}>Response:</strong>
-          <p style={{ marginTop: "10px", whiteSpace: "pre-wrap" }}>
-            {response}
-          </p>
+        {loading && <div style={{ color: "#0f172a" }}>Loading…</div>}
+        {error && <div style={{ color: "#b91c1c" }}>Error: {error}</div>}
+
+        <div style={{ flex: "1 1 auto", overflowY: "auto", marginTop: 6 }}>
+          <ResponseDisplay data={response} />
         </div>
       </div>
     </div>
@@ -111,3 +80,4 @@ function App() {
 }
 
 export default App;
+
