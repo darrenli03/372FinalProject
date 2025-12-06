@@ -100,20 +100,18 @@ def make_rag_prompt(query, relevant_passage):
 You are an expert export-control compliance analyst specializing in the U.S. Commerce Control List (CCL).
 Your task is to classify products, components, or technical descriptions strictly using the provided CONTEXT.
 
-Follow this reasoning process implicitly (do NOT reveal it in your final answer):
+Follow this REASONING PROCESS:
 1. Break down the query into key technical characteristics.
 2. Compare those characteristics to the control criteria in the CONTEXT.
 3. Identify any matching thresholds, performance parameters, material specifications, or definitions.
-4. Decide if the item is described, controlled, partially controlled, or not controlled according to the CONTEXT.
-5. Formulate a concise, direct answer *without revealing your reasoning steps*.
+4. Decide if the item is described, controlled, or not controlled according to the CONTEXT.
+5. Provide an answer in this format: "Final Answer: Yes" or "Final Answer: No".
 
 Rules:
 - Use ONLY the information found in the CONTEXT.
-- If the CONTEXT does not provide enough information to classify the item, respond with: "I don't know."
+- Only if the CONTEXT does not include any information about the query should you respond with: "Final Answer: No"
 - Do NOT hallucinate missing thresholds, materials, or ECCNs.
-- Do NOT justify your reasoning or explain the steps.
-- Do NOT mention chain of thought.
-- At the end, include a short citation of the exact lines/phrases from the CONTEXT that support your conclusion.
+- At the end, include a short citation of the exact lines/phrases from the CONTEXT that support your conclusion. If there is a specific ECCN mentioned in the CONTEXT that applies to the query, include that as well.
 
 ---
 CONTEXT:
@@ -124,9 +122,9 @@ QUERY:
 
 ---
 Provide:
-1. **A clear classification answer** (e.g., "Final Answer: Yes" or "Final Answer: No" or "Final Answer: I don't know")
-2. **A 1–2 sentence explanation referencing only the provided context**
-3. **A quotation of the specific context lines that support your answer**
+1. **An explanation following the above reasoning process**
+2. **A clear classification answer** (e.g., "Final Answer: Yes" or "Final Answer: No")
+3. **A quotation of the specific context lines that support your answer, along with the specific ECCN**
 """
     return prompt
 
@@ -147,7 +145,7 @@ def generate_rag_answer(query):
     temperature=0.7
     )
 
-    return response.choices[0].message.content
+    return response.choices[0].message.content, relevant_texts
 
 # Example usage
 if __name__ == "__main__":
