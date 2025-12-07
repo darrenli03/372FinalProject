@@ -47,7 +47,7 @@ def create_chroma_db(documents: List, path: str, name: str) -> Tuple[chromadb.Co
             chroma_client.delete_collection(name=name)
             print(f"Overwriting collection '{name}'.")
 
-    # Create a Google Gemini embedding function for ChromaDB
+    # Creating embeddings for ChromaDB using OpenAI text-embedding-3-small model
     openai_ef = embedding_functions.OpenAIEmbeddingFunction(
                 api_key=OPENAI_API_KEY,
                 model_name="text-embedding-3-small"

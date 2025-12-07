@@ -55,9 +55,8 @@ def get_relevant_passage(query: str, n_results: int = 4):
     # From pinecone_response, extract `chunk_text` from metadata of each match
     passages = []
 
-    # The Pinecone response may be a dict or an object with a `.matches` attribute.
+    # extract `.matches` attribute from pinecone response
     if hasattr(pinecone_response, "matches"):
-        #this is what is expected
         matches = pinecone_response.matches
         # print("matches found")
     else:
