@@ -10,10 +10,6 @@
 ## Unmatched Rubric Items:
 Core ML Fundamentals
 
-- Modular code design with reusable functions and classes rather than monolithic scripts (3 pts)
-  - just do good practices
-- Created baseline model for comparison (e.g., constant prediction, random, simple heuristic) (3 pts)
-    - Return random excel sheet with yes/no on everything
 - Implemented data augmentation appropriate to your data modality (evidence: code + evaluation of impact) (5 pts) 
     - this could be done in the process of creating our test dataset, for example creating an example user prompt and replacing words in it with synonyms to increase our test set size
 
@@ -25,15 +21,32 @@ Advanced System Integration
  
 Model Evaluation and Analysis
 
-- Measured and reported inference time, throughput, or computational efficiency (3 pts)
-- Analyzed model behavior on edge cases or out-of-distribution examples (5 pts)
-- Used at least three distinct and appropriate evaluation metrics for your task (3 pts)
-- Conducted both qualitative and quantitative evaluation with thoughtful discussion (5 pts)
 
-## TODO List:
+
+## TODO List: (total points so far: -7 if we don't include excel sheet processing)
+
+points: 
+3 for modular code
+3 + 5 for extracting and chunking text
+5 + 5 + 3 for generating and using embeddings and prompt engineering (chain of thought AND in context learning)
+5 + 10 for sending the query to OpenAI (RAG)
+7 for excel processing (Maybe)
+10 for production grade deployment
+10 for deploying to web (WIP)
+3 for baseline model (WIP)
+10 for curating test database 
+79 total (72 without excel) (62 without excel and assuming 0 on production grade deployment)
+
+model evaluation: 
+3 + 5 + 3 + 5 = 16
+
 - [X] Can mark an item done as shown here
 
   * [put associated rubric item(s) here]
+
+- [X] organize code into functions
+
+  * Modular code design with reusable functions and classes rather than monolithic scripts (3 pts)
 
 - [X] Extract text from pdf and chunk it 
 
@@ -46,28 +59,35 @@ Model Evaluation and Analysis
 
   *  Used sentence embeddings for semantic similarity or retrieval (5 pts)
 
-- [ ] Create query (system prompt + context + component info), apply in-context learning (one shot probably) so we are able to program actions based on the response from the OpenAI API
+- [X] Create query (system prompt + context + component info), apply in-context learning (one shot probably) so we are able to program actions based on the response from the OpenAI API
 
   * Applied in-context learning with few short examples or chain of thought prompting (5 pts)
   * Applied prompt engineering with evaluation of multiple prompt designs (evidence: comparison table) (3 pts)
 
-- [ ] Send constructed query to OpenAI API
+- [X] Send constructed query to OpenAI API
 
   * Made API calls to state-of-the-art model (GPT-4, Claude, Gemini) with meaningful integration into your system (5 pts)
   * Built retrieval-augmented generation (RAG) system with document retrieval and generation components (10 pts) 
 
+- [ ] Process an entire excel sheet of queries
+
+  * Implemented agentic system where model outputs trigger automated actions or tool calls (e.g., function calling, database writes, API integrations) (7 pts)
+
 - [ ] create server code that exposes API endpoints for frontend to call, as well as does rate limiting
+
   * Implemented production-grade deployment (evidence of at least two considerations such as rate limiting, caching, monitoring, error handling, logging) (10 pts)
-    * pinecone does auto scaling based on load, vercel/netlify also offer this feature for frontend
-  * Should also implement some monitoring for who's querying the server, or maybe like a login?
+    * pinecone does auto scaling based on load, vercel/netlify also offer this feature for frontend, could also add CI/CD pipeline, logging, user logins for rate limiting, and more
   
 - [ ] Create testing framework for evaluating model accuracy (may have to write test data classifying exports ourselves?) 
 
-  * Collected or constructed original dataset through substantial engineering effort (e.g., API integration, web scraping, manual annotation/labeling, custom curation) with documented methodology (10 pts) (may not get full points depending on how big of a test set we create)
+  * Collected or constructed original dataset through substantial engineering effort (e.g., API integration, web scraping, manual annotation/labeling, custom curation) with documented methodology (10 pts)
+  * Created baseline model for comparison (e.g., constant prediction, random, simple heuristic) (3 pts)
+    * Return random excel sheet with yes/no on everything
 
 - [ ] Create frontend UI (Vite, React)
 
   * Must allow user to upload excel sheet which will be sent to backend for processing
+  * Must allow user to also submit small text queries of a item to be processed
   * Should have some waiting page while the excel sheet is processing
   * return either a modified excel sheet (column added for appropriate tags of each product in sheet) or a text list of all items that are restricted
   * Should have safeguards (debouncing button presses, rate limiting on server side)
@@ -76,8 +96,12 @@ Model Evaluation and Analysis
 
   * Deployed model as functional web application with user interface (10 pts)
 
+- [ ] Evaluate performance (based on these rubric items)
 
-
+  * Measured and reported inference time, throughput, or computational efficiency (3 pts) 
+  * Analyzed model behavior on edge cases or out-of-distribution examples (5 pts)
+  * Used at least three distinct and appropriate evaluation metrics for your task (3 pts)
+  * Conducted both qualitative and quantitative evaluation with thoughtful discussion (5 pts)
 
 # Setup (using PowerShell)
 
