@@ -59,7 +59,7 @@ function App() {
         }}
       >
         <h2 style={{ color: "#1e3a8a", marginBottom: "20px", textAlign: "center", fontWeight: "600" }}>
-          Query the Document DB
+          Search the Commerce Control List!
         </h2>
 
         <div style={{ flex: "0 0 auto" }}>

@@ -19,14 +19,14 @@ export default function QueryForm({ onSend }) {
   return (
     <div>
       <label style={{ display: "block", marginBottom: 8, color: "#1e3a8a", fontWeight: 600 }}>
-        Ask a question
+        Enter a component/product to be queried:
       </label>
       <textarea
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
         rows={4}
-        placeholder='Enter a component/product to be queried (e.g. "night vision goggles")'
+        placeholder='(e.g. "night vision goggles")'
         style={{
           width: "100%",
           padding: 12,
