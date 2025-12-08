@@ -13,7 +13,7 @@ function App() {
     setResponse(null);
     try {
       const encoded = encodeURIComponent(text);
-      const res = await fetch(`https://52.15.135.23:8080/query_single?search_query=${encoded}`, {
+      const res = await fetch(`https://api.export.darrenli.org:8080/query_single?search_query=${encoded}`, {
         method: "POST",
       });
 
