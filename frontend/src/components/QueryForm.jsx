@@ -26,7 +26,7 @@ export default function QueryForm({ onSend }) {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
         rows={4}
-        placeholder='(e.g. "night vision goggles")'
+        placeholder='(e.g. "ceramic body armor plates")'
         style={{
           width: "100%",
           maxWidth: "100%",
