@@ -1,6 +1,7 @@
 import { useState } from "react";
 import QueryForm from "./components/QueryForm";
 import ResponseDisplay from "./components/ResponseDisplay";
+import ContextPanel from "./components/ContextPanel";
 
 function App() {
   const [response, setResponse] = useState(null);
@@ -37,42 +38,41 @@ function App() {
       style={{
         height: "100vh",
         width: "100vw",
-        background: "#f3f6fb",
+        background: "#060516",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         padding: "20px",
       }}
     >
-      <div
-        style={{
-          background: "white",
-          padding: "24px",
-          width: "600px",
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          border: "1px solid #e6e9f0",
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-          maxHeight: "80vh",
-        }}
-      >
-        <h2 style={{ color: "#1e3a8a", marginBottom: "20px", textAlign: "center", fontWeight: "600" }}>
+      <div style={{ width: "100%", maxWidth: 1100 }}>
+        <h1 style={{ color: "#e6eef8", marginBottom: "20px", textAlign: "center", fontWeight: "600" }}>
           Search the Commerce Control List!
-        </h2>
+        </h1>
 
-        <div style={{ flex: "0 0 auto" }}>
-          <QueryForm onSend={sendQuery} />
-        </div>
+        <div style={{ display: 'flex', gap: 16 }}>
+          {/* Left column: query + response */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ background: "#071129", padding: "18px", borderRadius: "12px", border: "1px solid #0f1724", boxShadow: "0 6px 18px rgba(2,6,23,0.6)", display: 'flex', flexDirection: 'column', gap: 12, height: '70vh' }}>
+              <div style={{ flex: '0 0 auto' }}>
+                <QueryForm onSend={sendQuery} />
+              </div>
 
-        <div style={{ minHeight: 8 }} />
+              {loading && <div style={{ color: "#e6eef8" }}>Loading…</div>}
+              {error && <div style={{ color: "#fca5a5" }}>Error: {error}</div>}
 
-        {loading && <div style={{ color: "#0f172a" }}>Loading…</div>}
-        {error && <div style={{ color: "#b91c1c" }}>Error: {error}</div>}
+              <div style={{ flex: '1 1 auto', overflowY: 'auto', marginTop: 6 }}>
+                <ResponseDisplay data={response} />
+              </div>
+            </div>
+          </div>
 
-        <div style={{ flex: "1 1 auto", overflowY: "auto", marginTop: 6 }}>
-          <ResponseDisplay data={response} />
+          {/* Right column: context/excerpts */}
+          <div style={{ width: 360 }}>
+            <div style={{ height: '70vh' }}>
+              <ContextPanel excerpts={response?.excerpts || []} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

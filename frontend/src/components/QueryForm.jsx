@@ -18,7 +18,7 @@ export default function QueryForm({ onSend }) {
 
   return (
     <div>
-      <label style={{ display: "block", marginBottom: 8, color: "#1e3a8a", fontWeight: 600 }}>
+      <label style={{ display: "block", marginBottom: 8, color: "#4EE7FF", fontWeight: 600 }}>
         Enter a component/product to be queried:
       </label>
       <textarea
@@ -29,12 +29,14 @@ export default function QueryForm({ onSend }) {
         placeholder='(e.g. "night vision goggles")'
         style={{
           width: "100%",
+          maxWidth: "100%",
+          boxSizing: 'border-box',
           padding: 12,
           borderRadius: 8,
-          border: "1px solid #cbd5e1",
+          border: "1px solid #334155",
           resize: "vertical",
-          background: "#f8fafc",
-          color: "black",
+          background: "#060516",
+          color: "#e6eef8",
         }}
       />
 
