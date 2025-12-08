@@ -29,7 +29,7 @@ export default function ResponseDisplay({ data }) {
       {finalAnswer && (
         <div style={{ marginBottom: 6 }}>
           <h2 style={{ fontWeight: 700, color: finalAnswer.toLowerCase().includes('yes') ? '#12bd12ff' : '#c71b1bff' }}>
-            Final Answer: {finalAnswer}
+            Restricted Under the CCL? {finalAnswer}
           </h2>
         </div>
       )}
