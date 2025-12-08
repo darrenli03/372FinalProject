@@ -103,14 +103,16 @@ Follow this REASONING PROCESS:
 1. Break down the query into key technical characteristics.
 2. Compare those characteristics to the control criteria in the CONTEXT.
 3. Identify any matching thresholds, performance parameters, material specifications, or definitions.
-4. Decide if the item is described, controlled, or not controlled according to the CONTEXT.
-5. Provide an answer in this format: "Final Answer: Yes" or "Final Answer: No".
+4. Decide if the item is described in to the CONTEXT.
+5. If it is described, determine if it meets the criteria described in the context. 
+6. Provide an answer in this format: "Final Answer: Yes" or "Final Answer: No".
+7. If unsure, default to "Final Answer: Yes" to ensure compliance.
+8. At the end, include a short citation of the exact lines/phrases from the CONTEXT that support your conclusion. If there is a specific ECCN mentioned in the CONTEXT that applies to the query, include that as well.
 
 Rules:
 - Use ONLY the information found in the CONTEXT.
 - Only if the CONTEXT does not include any information about the query should you respond with: "Final Answer: No"
 - Do NOT hallucinate missing thresholds, materials, or ECCNs.
-- At the end, include a short citation of the exact lines/phrases from the CONTEXT that support your conclusion. If there is a specific ECCN mentioned in the CONTEXT that applies to the query, include that as well.
 
 ---
 CONTEXT:
