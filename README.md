@@ -28,6 +28,17 @@ cd frontend; npm install; npm run dev
 
 ## Evaluation
 
+- Testing Datanbase: https://docs.google.com/spreadsheets/d/1KOmhZdAN5oiNj53-cfMunaYKK5Qf9fVJdLKmyaLzLyc/edit?usp=sharing 
+
+- Quantitative:
+  -  Model correctly identified 47/52
+  - Overall accuracy of 90.4% 
+  - Precision: Model had a precision of 100% for “Yes” and a precision of 84.4% for “No”
+  - Recall: Model’s 25 expected “Yes” responses, it only gave us 20 so we have a recall of 80%
+
+- Qualitative:
+  - Edge cases technically correct and also explains chain of thought and justifies anwser in anwser return section
+  - Retrevied context almost always contains queried item when model is correct and often misses it when model is wrong
 
 ## Individual Contributions
 
@@ -37,9 +48,9 @@ cd frontend; npm install; npm run dev
   - Additional work: Setting up AWS EC2 instance (Nginx and HTTPS certificate configuration), deploying frontend on Vercel (DNS configuration) with DoS protection via Cloudflare
 - Andy Li
   - PDF processing (`text_extractor.py`)
-  - testing dataset curation [linked here](https://docs.google.com/spreadsheets/d/1KOmhZdAN5oiNj53-cfMunaYKK5Qf9fVJdLKmyaLzLyc/edit?usp=sharing)
-  - manual testing of model performance for items in testing dataset 
-  - analyzing results quantitatively and qualitatively
+  - Testing dataset curation [linked here](https://docs.google.com/spreadsheets/d/1KOmhZdAN5oiNj53-cfMunaYKK5Qf9fVJdLKmyaLzLyc/edit?usp=sharing)
+  - Manual testing of model performance for items in testing dataset 
+  - Analyzing results quantitatively and qualitatively
 
 ## Miscellaneous Notes
 
