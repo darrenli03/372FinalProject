@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QueryForm from "./components/QueryForm";
 import ResponseDisplay from "./components/ResponseDisplay";
 import ContextPanel from "./components/ContextPanel";
@@ -7,6 +7,13 @@ function App() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const sendQuery = async (text) => {
     setLoading(true);
@@ -36,8 +43,9 @@ function App() {
   return (
     <div
       style={{
-        height: "100vh",
-        width: "100vw",
+        minHeight: "100dvh",
+        width: "100%",
+        boxSizing: 'border-box',
         background: "#060516",
         display: "flex",
         justifyContent: "center",
@@ -50,26 +58,28 @@ function App() {
           Search the Commerce Control List!
         </h1>
 
-        <div style={{ display: 'flex', gap: 16 }}>
+        <div style={{ display: 'flex', gap: 16, flexDirection: isMobile ? 'column' : 'row' }}>
           {/* Left column: query + response */}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ background: "#071129", padding: "18px", borderRadius: "12px", border: "1px solid #0f1724", boxShadow: "0 6px 18px rgba(2,6,23,0.6)", display: 'flex', flexDirection: 'column', gap: 12, height: '70vh' }}>
-              <div style={{ flex: '0 0 auto' }}>
-                <QueryForm onSend={sendQuery} />
+            <div style={{ background: "#071129", padding: "18px", borderRadius: "12px", border: "1px solid #0f1724", boxShadow: "0 6px 18px rgba(2,6,23,0.6)", display: 'flex', flexDirection: 'column', gap: 12, maxHeight: isMobile ? '50vh' : '70vh', height: isMobile ? 'auto' : '70vh', boxSizing: 'border-box', overflow: 'hidden' }}>
+              <div style={{ flex: '0 0 auto', width: '100%', display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+                <div style={{ width: '100%', maxWidth: isMobile ? 720 : '100%' }}>
+                  <QueryForm onSend={sendQuery} />
+                </div>
               </div>
 
               {loading && <div style={{ color: "#e6eef8" }}>Loading…</div>}
               {error && <div style={{ color: "#fca5a5" }}>Error: {error}</div>}
 
-              <div style={{ flex: '1 1 auto', overflowY: 'auto', marginTop: 6 }}>
+              <div style={{ flex: '1 1 auto', overflowY: 'auto', marginTop: 6, paddingRight: 4 }}>
                 <ResponseDisplay data={response} />
               </div>
             </div>
           </div>
 
           {/* Right column: context/excerpts */}
-          <div style={{ width: 360 }}>
-            <div style={{ height: '70vh' }}>
+          <div style={{ width: isMobile ? '100%' : 360, marginTop: isMobile ? 16 : 0, boxSizing: 'border-box' }}>
+            <div style={{ maxHeight: isMobile ? '40vh' : '70vh', overflowY: isMobile ? 'auto' : 'hidden', overflowX: 'hidden' }}>
               <ContextPanel excerpts={response?.excerpts || []} />
             </div>
           </div>
