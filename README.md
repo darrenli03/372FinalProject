@@ -20,6 +20,7 @@ python backend\server.py
 ```
 cd frontend; npm install; npm run dev
 ```
+For more details, check out `SETUP.md`
 
 ## Video Links
 
