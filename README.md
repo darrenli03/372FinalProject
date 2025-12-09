@@ -23,8 +23,8 @@ cd frontend; npm install; npm run dev
 
 ## Video Links
 
-- Demo video: https://example.com/demo 
-- Technical walkthrough: https://example.com/walkthrough 
+- Non-technical demo video: [linked here](https://youtu.be/20f0HVoEuMw)
+- Technical walkthrough: [linked here](https://youtu.be/eLkqJT3o3_U)
 
 ## Evaluation
 
