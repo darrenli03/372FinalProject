@@ -42,3 +42,6 @@ npm run dev
 pip freeze > requirements.txt
 ```
 
+### Regenerating databases 
+To regenerate the vector database, boot up the virtual environment with the requirements from backend/requirements.txt, first run doc_embedding.py (text_extractor.py generated files/ccl.txt that is already version controlled, but may need to be updated as the legal body updates) (this will likely take an hour or two), then run pinecone_upload.py to replace the old index in pinecone with the new embeddings (perhaps about 10 minutes?)
+
