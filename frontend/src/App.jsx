@@ -79,7 +79,7 @@ function App() {
 
           {/* Right column: context/excerpts */}
           <div style={{ width: isMobile ? '100%' : 360, marginTop: isMobile ? 16 : 0, boxSizing: 'border-box' }}>
-            <div style={{ maxHeight: isMobile ? '40vh' : '70vh', overflowY: isMobile ? 'auto' : 'hidden', overflowX: 'hidden' }}>
+            <div style={{ maxHeight: isMobile ? '40vh' : '70vh', overflowY: 'auto', overflowX: 'hidden' }}>
               <ContextPanel excerpts={response?.excerpts || []} />
             </div>
           </div>
